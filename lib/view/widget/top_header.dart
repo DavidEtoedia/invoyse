@@ -42,7 +42,7 @@ class TopheaderView extends StatelessWidget {
             children: [
               Text(
                 business.selectedBusiness.isEmpty
-                    ? "No Added Business"
+                    ? "No Business Added"
                     : business.selectedBusiness,
                 style: context.textTheme.bodyMedium?.copyWith(
                     color: Colors.white,
