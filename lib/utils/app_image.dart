@@ -4,4 +4,5 @@ class AppImage {
   static const money = "assets/images/cash.svg";
   static const upload = "assets/images/upload.svg";
   static const category = "assets/images/category.svg";
+  static const checked = "assets/images/checked.svg";
 }

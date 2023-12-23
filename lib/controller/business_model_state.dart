@@ -1,3 +1,0 @@
-// class BusinessModelState extends Equatable {
-  
-// }

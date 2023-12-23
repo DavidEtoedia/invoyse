@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:invoyse_task/utils/app-button/app_button.dart';
-import 'package:invoyse_task/utils/app_font/app_font_style.dart';
-import 'package:invoyse_task/utils/app_image.dart';
-import 'package:invoyse_task/utils/app_spacer.dart';
-import 'package:invoyse_task/utils/currency_formatter.dart';
-import 'package:invoyse_task/utils/extensions.dart';
-import 'package:invoyse_task/utils/textform_input.dart';
-import 'package:invoyse_task/utils/validator.dart';
+import 'package:invoyse_task/controller/business_model_controller.dart';
+import 'package:invoyse_task/controller/media_controller.dart';
+import 'package:invoyse_task/model/business_model.dart';
+import 'package:invoyse_task/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 class BusinessBranding extends StatefulWidget {
-  final VoidCallback pressed;
-  const BusinessBranding({super.key, required this.pressed});
+  const BusinessBranding({super.key});
 
   @override
   State<BusinessBranding> createState() => _BusinessBrandingState();
@@ -23,8 +19,11 @@ class _BusinessBrandingState extends State<BusinessBranding> {
   final TextEditingController upload = TextEditingController();
   final TextEditingController amount = TextEditingController();
 
+  String fullPath = "";
+  bool isloading = false;
+
   final _formKey = GlobalKey<FormState>();
-  GlobalKey<State> _key = GlobalKey();
+  final GlobalKey<State> _key = GlobalKey();
 
   final List<String> categories = [
     'Technology',
@@ -34,6 +33,18 @@ class _BusinessBrandingState extends State<BusinessBranding> {
     'Construction',
     'Automotive'
   ];
+
+  handleReq() {
+    var model = BusinessModel(
+      amount: amount.text,
+      businessCategory: businessCategory.text,
+      logo: fullPath,
+    );
+
+    context.read<BusinessController>().addBusiness(model);
+
+    context.popToFirst();
+  }
 
   @override
   void dispose() {
@@ -89,16 +100,41 @@ class _BusinessBrandingState extends State<BusinessBranding> {
                 TextFormInput(
                     labelText: "Upload Your Logo",
                     controller: upload,
+                    readOnly: true,
                     keyboardType: TextInputType.name,
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.only(left: 13, right: 20),
-                      child: SvgPicture.asset(
-                        AppImage.upload,
-                      ),
-                    ),
+                    suffixIcon: isloading
+                        ? const SizedBox(
+                            height: 10,
+                            width: 10,
+                            child: Padding(
+                              padding: EdgeInsets.all(15.0),
+                              child: CircularProgressIndicator(
+                                color: AppColors.primaryColor,
+                              ),
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.only(left: 13, right: 20),
+                            child: SvgPicture.asset(
+                              AppImage.upload,
+                            ),
+                          ),
                     inputFormatters: [
                       FilteringTextInputFormatter.deny(RegExp('[ ]')),
                     ],
+                    onTap: () async {
+                      setState(() {
+                        isloading = true;
+                      });
+                      final res = await MediaClass.pickImage();
+                      if (res == null) return;
+
+                      setState(() {
+                        isloading = false;
+                        fullPath = res.$1;
+                        upload.text = res.$2;
+                      });
+                    },
                     validator: (value) => validateBusinessName(value)),
                 const Space(20),
                 Stack(
@@ -130,7 +166,7 @@ class _BusinessBrandingState extends State<BusinessBranding> {
                 ),
                 const Space(20),
                 TextFormInput(
-                    labelText: " NGN - Nigerian Naira (₦)",
+                    labelText: " NGN - Nigerian Naira (NGN)",
                     controller: amount,
                     keyboardType: TextInputType.number,
                     suffixIcon: Padding(
@@ -155,7 +191,9 @@ class _BusinessBrandingState extends State<BusinessBranding> {
                                   upload.text.isEmpty ||
                                   businessCategory.text.isEmpty)
                               ? null
-                              : () {},
+                              : () {
+                                  handleReq();
+                                },
                           text: "Create Your Invoice");
                     })
               ],

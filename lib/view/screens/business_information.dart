@@ -3,13 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:invoyse_task/controller/business_model_controller.dart';
 import 'package:invoyse_task/model/business_model.dart';
-import 'package:invoyse_task/utils/app-button/app_button.dart';
-import 'package:invoyse_task/utils/app_font/app_font_style.dart';
-import 'package:invoyse_task/utils/app_image.dart';
-import 'package:invoyse_task/utils/app_spacer.dart';
-import 'package:invoyse_task/utils/extensions.dart';
-import 'package:invoyse_task/utils/textform_input.dart';
-import 'package:invoyse_task/utils/validator.dart';
+import 'package:invoyse_task/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class BusinessInformation extends StatefulWidget {
@@ -95,9 +89,6 @@ class _BusinessInformationState extends State<BusinessInformation> {
                     labelText: "Business name",
                     controller: businessName,
                     keyboardType: TextInputType.name,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.deny(RegExp('[ ]')),
-                    ],
                     validator: (value) => validateBusinessName(value)),
                 const Space(20),
                 TextFormInput(
@@ -147,10 +138,11 @@ class _BusinessInformationState extends State<BusinessInformation> {
                                     }
                                     if (mounted) {
                                       handleReq();
+                                      widget.pressed();
                                     }
                                   }
                                 },
-                          text: "Next");
+                          text: "  Next  ");
                     })
               ],
             ),

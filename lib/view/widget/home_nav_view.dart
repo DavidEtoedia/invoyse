@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:invoyse_task/model/home_item_model.dart';
-import 'package:invoyse_task/utils/app-color/app_color.dart';
-import 'package:invoyse_task/utils/app_font/app_font_style.dart';
-import 'package:invoyse_task/utils/extensions.dart';
+import 'package:invoyse_task/utils/utils.dart';
 
 class HomeNavigationView extends StatelessWidget {
   const HomeNavigationView({super.key});

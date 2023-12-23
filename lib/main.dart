@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:invoyse_task/controller/business_model_controller.dart';
+import 'package:invoyse_task/controller/media_controller.dart';
 import 'package:invoyse_task/utils/navigator.dart';
 import 'package:invoyse_task/view/home_page.dart';
 import 'package:provider/provider.dart';
 
 import 'utils/app_font/app_font_style.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  MediaClass.init();
   runApp(const MyApp());
 }
 
@@ -22,7 +25,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => BusinessController(),
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Invoyse Task',
         navigatorKey: navigator.key,
         theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

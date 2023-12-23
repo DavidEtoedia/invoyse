@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:invoyse_task/controller/business_model_controller.dart';
 import 'package:invoyse_task/model/business_model.dart';
 import 'package:invoyse_task/utils/app-color/app_color.dart';
 import 'package:invoyse_task/utils/app_spacer.dart';
@@ -29,10 +28,15 @@ class _BusinessFormState extends State<BusinessForm> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // if (pageCount > 0)
                 IconButton(
                     onPressed: () {
-                      context.popView();
+                      if (pageCount == 0) {
+                        context.popView();
+                      } else {
+                        controller.previousPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.ease);
+                      }
                     },
                     icon: const Icon(Icons.arrow_back)),
                 const Spacer(),
@@ -55,7 +59,6 @@ class _BusinessFormState extends State<BusinessForm> {
                   height: 3,
                   width: 50,
                 ),
-
                 const Spacer(),
               ],
             ),
@@ -74,13 +77,7 @@ class _BusinessFormState extends State<BusinessForm> {
                           curve: Curves.ease);
                     },
                   ),
-                  BusinessBranding(
-                    pressed: () {
-                      controller.previousPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.ease);
-                    },
-                  ),
+                  const BusinessBranding(),
                 ],
               ),
             )
